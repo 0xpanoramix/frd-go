@@ -1,0 +1,96 @@
+// Use this for Rust
+
+name: Tests
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  lint:
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, macos-latest ]
+        toolchain: [ stable ]
+
+    name: Run linter with rust (${{ matrix.toolchain }}) on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v2
+
+      - name: Install rustfmt and clippy using ${{ matrix.toolchain }} toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: ${{ matrix.toolchain }}
+          components: rustfmt, clippy
+
+      - name: Run cargo fmt
+        uses: actions-rs/cargo@v1
+        with:
+          command: fmt
+          args: --all --check
+
+      - name: Run cargo clippy
+        uses: actions-rs/clippy-check@v1
+        with:
+          args: --all --all-features -- -D warnings
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+  test:
+    needs: lint
+
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, macos-latest ]
+        toolchain: [ stable ]
+
+    name: Run tests with rust (${{ matrix.toolchain }}) on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v2
+
+      - name: Install rust using ${{ matrix.toolchain }} toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: ${{ matrix.toolchain }}
+
+      - name: Run tests
+        uses: actions-rs/cargo@v1
+        with:
+          command: test
+          args: --workspace
+
+  build:
+    needs: test
+
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, macos-latest ]
+        toolchain: [ stable ]
+
+    name: Build project with rust (${{ matrix.toolchain }}) on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v2
+
+      - name: Install rust using ${{ matrix.toolchain }} toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: ${{ matrix.toolchain }}
+
+      - name: Build in release mode
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release --all-features
