@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"github.com/r3labs/sse/v2"
 	"net/http"
+	"time"
 )
 
 const (
@@ -28,8 +29,9 @@ func NewMockServer(topic EventType) *MockServer {
 	})
 
 	server.srv = &http.Server{
-		Addr:    ":8080",
-		Handler: server.mux,
+		ReadHeaderTimeout: time.Second,
+		Addr:              ":8080",
+		Handler:           server.mux,
 	}
 
 	return server
