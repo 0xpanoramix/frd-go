@@ -20,7 +20,32 @@ These events are forwarded in a channel you can use in your own application.
 
 ### Quickstart
 
-Add some code example on how to use the project.
+Below is an example of how you can create a client:
+```go
+package main
+
+import (
+	"fmt"
+	"github.com/0xpanoramix/frd-go/client"
+	"log"
+)
+
+func main() {
+	sseClient, err := client.New(client.WithRelay("http://localhost:8080"), client.WithTopics(client.BuilderBidValid))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	subscription, err := sseClient.Subscribe("messages")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	data := <-subscription
+	fmt.Println(client.EventType(data.Event)) // Should print "builder_bid_valid"
+}
+
+```
 
 ## Author
 
