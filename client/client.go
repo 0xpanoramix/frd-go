@@ -3,6 +3,8 @@ package client
 import (
 	"context"
 	"encoding/json"
+	"github.com/0xpanoramix/frd-go/dto"
+	topics2 "github.com/0xpanoramix/frd-go/topics"
 	"github.com/r3labs/sse/v2"
 	"sync"
 )
@@ -22,7 +24,7 @@ type SSEClient struct {
 	client *sse.Client
 
 	// Messages management.
-	topics   []EventType
+	topics   []topics2.EventType
 	messages chan *sse.Event
 }
 
@@ -51,10 +53,10 @@ func New(opts ...Option) (*SSEClient, error) {
 	}, nil
 }
 
-func (c *SSEClient) Subscribe(stream string) (chan Result, error) {
+func (c *SSEClient) Subscribe(stream string) (chan dto.Result, error) {
 	// We use a channel that sends message with the associated error instead of two separate
 	// channels as it is thread safe and avoid out-of-order responses.
-	results := make(chan Result)
+	results := make(chan dto.Result)
 
 	if err := c.client.SubscribeChanWithContext(c.ctx, stream, c.messages); err != nil {
 		return nil, err
@@ -70,8 +72,8 @@ func (c *SSEClient) Subscribe(stream string) (chan Result, error) {
 			case <-c.ctx.Done():
 				return
 			case message := <-c.messages:
-				result := Result{
-					Message: &Data{},
+				result := dto.Result{
+					Message: &dto.Data{},
 					Error:   nil,
 				}
 
