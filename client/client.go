@@ -41,6 +41,7 @@ func New(opts ...Option) (*SSEClient, error) {
 
 	// This way, we can cancel the child without cancelling the parent context.
 	ctx, cancelFunc := context.WithCancel(s.ctx)
+
 	return &SSEClient{
 		ctx:      ctx,
 		cancel:   cancelFunc,

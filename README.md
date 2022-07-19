@@ -6,9 +6,10 @@ A client for SSE (server-sent events) events sent by Flashbots Relayers which fo
 ## How does it work ?
 
 Using the [sse package](https://github.com/r3labs/sse) made by r3labs, it connects to the 
-provided relayer and subscribe to incoming events.
+provided relayer and subscribe to incoming events: `BidTrace`.
 
-These events are forwarded in a channel you can use in your own application.
+These bids are forwarded (along with an optional error that may have happened during parsing) in a 
+channel you can use in your own application.
 
 ## Getting started !
 
@@ -25,26 +26,31 @@ Below is an example of how you can create a client:
 package main
 
 import (
+	"context"
 	"fmt"
 	"github.com/0xpanoramix/frd-go/client"
 	"log"
 )
 
 func main() {
-	sseClient, err := client.New(client.WithRelay("http://localhost:8080"), client.WithTopics(client.BuilderBidValid))
+	opts := []client.Option{
+		client.WithRelay("http://127.0.0.1:8080"),
+		client.WithTopics(client.BuilderBidValid),
+		client.WithContext(context.Background()),
+	}
+	clt, err := client.New(opts...)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	subscription, err := sseClient.Subscribe("messages")
-	if err != nil {
-		log.Fatal(err)
-	}
+	res, err := clt.Subscribe("messages")
 
-	data := <-subscription
-	fmt.Println(client.EventType(data.Event)) // Should print "builder_bid_valid"
+	data := <-res
+	// This will print a Flashbots BidTrace.
+	fmt.Println(data.Message.EventData)
+
+	clt.Unsubscribe()
 }
-
 ```
 
 ## Author
