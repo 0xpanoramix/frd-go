@@ -90,4 +90,5 @@ func (c *SSEClient) Unsubscribe() {
 	c.client.Unsubscribe(c.messages)
 	c.cancel()
 	c.wg.Wait()
+	close(c.messages)
 }
