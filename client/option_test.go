@@ -1,6 +1,7 @@
 package client
 
 import (
+	"github.com/0xpanoramix/frd-go/topics"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
@@ -17,15 +18,15 @@ func TestApplyAndValidateSettings(t *testing.T) {
 			name: "Valid options",
 			opts: []Option{
 				WithRelay("http://localhost:8080"),
-				WithTopics(BuilderBidValid, ProposerGetHeader, ProposerSubmitBlindedBlock),
+				WithTopics(topics.BuilderBidValid, topics.ProposerGetHeader, topics.ProposerSubmitBlindedBlock),
 			},
 			expectedError: false,
 			expectedSettings: &settings{
 				relayURL: "http://localhost:8080",
-				topics: []EventType{
-					BuilderBidValid,
-					ProposerGetHeader,
-					ProposerSubmitBlindedBlock,
+				topics: []topics.EventType{
+					topics.BuilderBidValid,
+					topics.ProposerGetHeader,
+					topics.ProposerSubmitBlindedBlock,
 				},
 				opts: nil,
 			},
@@ -34,14 +35,14 @@ func TestApplyAndValidateSettings(t *testing.T) {
 			name: "Invalid relay URL",
 			opts: []Option{
 				WithRelay("d"),
-				WithTopics(BuilderBidValid, ProposerGetHeader),
+				WithTopics(topics.BuilderBidValid, topics.ProposerGetHeader),
 			},
 			expectedError: true,
 			expectedSettings: &settings{
 				relayURL: "d",
-				topics: []EventType{
-					BuilderBidValid,
-					ProposerGetHeader,
+				topics: []topics.EventType{
+					topics.BuilderBidValid,
+					topics.ProposerGetHeader,
 				},
 				opts: nil,
 			},

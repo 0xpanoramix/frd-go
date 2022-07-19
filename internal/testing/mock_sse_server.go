@@ -1,7 +1,9 @@
-package client
+package testing
 
 import (
 	"encoding/json"
+	"github.com/0xpanoramix/frd-go/dto"
+	"github.com/0xpanoramix/frd-go/topics"
 	"github.com/r3labs/sse/v2"
 	"net/http"
 	"time"
@@ -17,13 +19,13 @@ type MockServer struct {
 	mux    *http.ServeMux
 }
 
-func NewMockServer(topic EventType) *MockServer {
+func NewMockServer(pattern string, topic topics.EventType) *MockServer {
 	server := &MockServer{sseSRV: sse.New()}
 
 	server.sseSRV.CreateStream(MockStream)
 
 	server.mux = http.NewServeMux()
-	server.mux.HandleFunc(DataEndpoint, func(w http.ResponseWriter, r *http.Request) {
+	server.mux.HandleFunc(pattern, func(w http.ResponseWriter, r *http.Request) {
 		server.Publish(topic)
 		server.sseSRV.ServeHTTP(w, r)
 	})
@@ -41,16 +43,16 @@ func (s *MockServer) Serve() error {
 	return s.srv.ListenAndServe()
 }
 
-func (s *MockServer) Publish(topic EventType) {
+func (s *MockServer) Publish(topic topics.EventType) {
 	switch topic {
-	case BuilderBidValid:
-		data, _ := json.Marshal(Data{
-			EventType: BuilderBidValid,
+	case topics.BuilderBidValid:
+		data, _ := json.Marshal(dto.Data{
+			EventType: topics.BuilderBidValid,
 		})
 
 		s.sseSRV.Publish(MockStream, &sse.Event{
 			Data:  data,
-			Event: []byte(BuilderBidValid),
+			Event: []byte(topics.BuilderBidValid),
 		})
 	}
 }

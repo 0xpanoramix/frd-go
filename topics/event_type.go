@@ -1,4 +1,4 @@
-package client
+package topics
 
 type EventType string
 

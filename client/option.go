@@ -2,6 +2,7 @@ package client
 
 import (
 	"context"
+	"github.com/0xpanoramix/frd-go/topics"
 	"github.com/r3labs/sse/v2"
 	"net/url"
 )
@@ -16,7 +17,7 @@ func WithRelay(relayURL string) Option {
 }
 
 // WithTopics is used to provide which topics to listen to.
-func WithTopics(topics ...EventType) Option {
+func WithTopics(topics ...topics.EventType) Option {
 	return func(s *settings) {
 		s.topics = topics
 	}
@@ -40,14 +41,14 @@ func WithContext(ctx context.Context) Option {
 func defaultOptions() []Option {
 	return []Option{
 		WithContext(context.Background()),
-		WithTopics(BuilderBidValid, ProposerGetHeader, ProposerSubmitBlindedBlock),
+		WithTopics(topics.BuilderBidValid, topics.ProposerGetHeader, topics.ProposerSubmitBlindedBlock),
 	}
 }
 
 type settings struct {
 	ctx      context.Context
 	relayURL string
-	topics   []EventType
+	topics   []topics.EventType
 	opts     []func(c *sse.Client)
 }
 
