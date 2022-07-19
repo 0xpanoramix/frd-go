@@ -1,6 +1,7 @@
 package client
 
 import (
+	"context"
 	"errors"
 	"github.com/stretchr/testify/assert"
 	"net/http"
@@ -29,12 +30,20 @@ func TestSubscribeToValidBids(t *testing.T) {
 		}
 	}()
 
-	client, err := New(WithRelay("http://127.0.0.1:8080"), WithTopics(BuilderBidValid))
+	ctx := context.Background()
+	opts := []Option{
+		WithRelay("http://127.0.0.1:8080"),
+		WithTopics(BuilderBidValid),
+		WithContext(ctx),
+	}
+	client, err := New(opts...)
 	assert.NoError(t, err)
 
 	res, err := client.Subscribe(MockStream)
 	assert.NoError(t, err)
 
 	data := <-res
-	assert.Equal(t, EventType(data.Event), BuilderBidValid)
+	assert.Equal(t, data.Message.EventType, BuilderBidValid)
+
+	client.Unsubscribe()
 }
