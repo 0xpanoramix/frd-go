@@ -1,6 +1,7 @@
 package client
 
 import (
+	"context"
 	"github.com/r3labs/sse/v2"
 	"net/url"
 )
@@ -28,7 +29,23 @@ func WithSSEClientOptions(opts ...func(c *sse.Client)) Option {
 	}
 }
 
+// WithContext is used to provide a specific external context to the client subscription.
+func WithContext(ctx context.Context) Option {
+	return func(s *settings) {
+		s.ctx = ctx
+	}
+}
+
+// defaultOptions is used to provide default options for the context and topics to subscribe to.
+func defaultOptions() []Option {
+	return []Option{
+		WithContext(context.Background()),
+		WithTopics(BuilderBidValid, ProposerGetHeader, ProposerSubmitBlindedBlock),
+	}
+}
+
 type settings struct {
+	ctx      context.Context
 	relayURL string
 	topics   []EventType
 	opts     []func(c *sse.Client)

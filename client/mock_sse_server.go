@@ -44,7 +44,9 @@ func (s *MockServer) Serve() error {
 func (s *MockServer) Publish(topic EventType) {
 	switch topic {
 	case BuilderBidValid:
-		data, _ := json.Marshal(Data{})
+		data, _ := json.Marshal(Data{
+			EventType: BuilderBidValid,
+		})
 
 		s.sseSRV.Publish(MockStream, &sse.Event{
 			Data:  data,
