@@ -1,9 +1,11 @@
 package client
 
-import "github.com/0xpanoramix/frd-go/dto"
+import (
+	"github.com/flashbots/go-boost-utils/types"
+)
 
 type Data struct {
-	Timestamp string       `json:"timestamp"`
-	EventType EventType    `json:"event_type"`
-	EventData dto.BidTrace `json:"event_data"`
+	Timestamp string         `json:"timestamp"`
+	EventType EventType      `json:"event_type"`
+	EventData types.BidTrace `json:"event_data"`
 }
