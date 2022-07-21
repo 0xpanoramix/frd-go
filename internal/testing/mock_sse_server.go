@@ -58,5 +58,7 @@ func (s *MockServer) Publish(topic topics.EventType) {
 }
 
 func (s *MockServer) Close() error {
+	s.sseSRV.Close()
+
 	return s.srv.Close()
 }
