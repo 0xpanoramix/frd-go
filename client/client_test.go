@@ -14,7 +14,7 @@ import (
 func TestSubscribeToValidBids(t *testing.T) {
 	var wg sync.WaitGroup
 
-	srv := testing2.NewMockServer(DataEndpoint, topics.BuilderBidValid)
+	srv := testing2.NewMockServer(DataEndpoint)
 	defer func() {
 		err := srv.Close()
 		assert.NoError(t, err)
@@ -35,9 +35,10 @@ func TestSubscribeToValidBids(t *testing.T) {
 	ctx := context.Background()
 	opts := []Option{
 		WithRelay("http://127.0.0.1:8080"),
-		WithTopics(topics.BuilderBidValid),
+		WithTopics(topics.BuilderBidValid, topics.ProposerGetHeader),
 		WithContext(ctx),
 	}
+
 	client, err := New(opts...)
 	assert.NoError(t, err)
 
@@ -46,6 +47,9 @@ func TestSubscribeToValidBids(t *testing.T) {
 
 	data := <-res
 	assert.Equal(t, data.Message.EventType, topics.BuilderBidValid)
+
+	data = <-res
+	assert.Equal(t, data.Message.EventType, topics.ProposerGetHeader)
 
 	client.Unsubscribe()
 }

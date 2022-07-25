@@ -19,14 +19,16 @@ type MockServer struct {
 	mux    *http.ServeMux
 }
 
-func NewMockServer(pattern string, topic topics.EventType) *MockServer {
+func NewMockServer(pattern string) *MockServer {
 	server := &MockServer{sseSRV: sse.New()}
 
 	server.sseSRV.CreateStream(MockStream)
 
 	server.mux = http.NewServeMux()
 	server.mux.HandleFunc(pattern, func(w http.ResponseWriter, r *http.Request) {
-		server.Publish(topic)
+		for _, topic := range r.URL.Query()["topics"] {
+			server.Publish(topics.EventType(topic))
+		}
 		server.sseSRV.ServeHTTP(w, r)
 	})
 
@@ -44,17 +46,27 @@ func (s *MockServer) Serve() error {
 }
 
 func (s *MockServer) Publish(topic topics.EventType) {
+	var data []byte
+
 	switch topic {
 	case topics.BuilderBidValid:
-		data, _ := json.Marshal(dto.Data{
+		data, _ = json.Marshal(dto.Data{
 			EventType: topics.BuilderBidValid,
 		})
-
-		s.sseSRV.Publish(MockStream, &sse.Event{
-			Data:  data,
-			Event: []byte(topics.BuilderBidValid),
+	case topics.ProposerGetHeader:
+		data, _ = json.Marshal(dto.Data{
+			EventType: topics.ProposerGetHeader,
+		})
+	case topics.ProposerSubmitBlindedBlock:
+		data, _ = json.Marshal(dto.Data{
+			EventType: topics.ProposerSubmitBlindedBlock,
 		})
 	}
+
+	s.sseSRV.Publish(MockStream, &sse.Event{
+		Data:  data,
+		Event: []byte(topic),
+	})
 }
 
 func (s *MockServer) Close() error {

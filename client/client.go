@@ -3,6 +3,7 @@ package client
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"github.com/0xpanoramix/frd-go/dto"
 	topics2 "github.com/0xpanoramix/frd-go/topics"
 	"github.com/r3labs/sse/v2"
@@ -44,11 +45,16 @@ func New(opts ...Option) (*SSEClient, error) {
 	// This way, we can cancel the child without cancelling the parent context.
 	ctx, cancelFunc := context.WithCancel(s.ctx)
 
+	url := fmt.Sprintf("%s%s?", s.relayURL, DataEndpoint)
+	for _, topic := range s.topics {
+		url += fmt.Sprintf("topics=%s&", topic)
+	}
+
 	return &SSEClient{
 		ctx:      ctx,
 		cancel:   cancelFunc,
 		topics:   s.topics,
-		client:   sse.NewClient(s.relayURL+DataEndpoint, s.opts...),
+		client:   sse.NewClient(url, s.opts...),
 		messages: make(chan *sse.Event),
 	}, nil
 }
