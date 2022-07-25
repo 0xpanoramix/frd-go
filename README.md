@@ -16,7 +16,7 @@ channel you can use in your own application.
 ### Installation
 
 ```shell
-# Probably a bash command here
+# go get command coming soon in a release near you
 ```
 
 ### Quickstart
@@ -29,13 +29,14 @@ import (
 	"context"
 	"fmt"
 	"github.com/0xpanoramix/frd-go/client"
+	"github.com/0xpanoramix/frd-go/topics"
 	"log"
 )
 
 func main() {
 	opts := []client.Option{
 		client.WithRelay("http://127.0.0.1:8080"),
-		client.WithTopics(client.BuilderBidValid),
+		client.WithTopics(topics.BuilderBidValid),
 		client.WithContext(context.Background()),
 	}
 	clt, err := client.New(opts...)
@@ -51,6 +52,23 @@ func main() {
 
 	clt.Unsubscribe()
 }
+```
+
+### To contribute
+
+Make sure you have Go installed
+```shell
+go version
+```
+
+Then to build the project:
+```shell
+go build
+```
+
+And to run the tests:
+```shell
+go test ./... -v -race
 ```
 
 ## Author
