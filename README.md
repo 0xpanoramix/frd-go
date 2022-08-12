@@ -11,6 +11,8 @@ provided relayer and subscribe to incoming events: `BidTrace`.
 These bids are forwarded (along with an optional error that may have happened during parsing) in a 
 channel you can use in your own application.
 
+For now, it only supports connection to a single relay.
+
 ## Getting started !
 
 ### Installation
