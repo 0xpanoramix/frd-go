@@ -16,7 +16,7 @@ channel you can use in your own application.
 ### Installation
 
 ```shell
-# go get command coming soon in a release near you
+go get github.com/0xpanoramix/frd-go
 ```
 
 ### Quickstart
