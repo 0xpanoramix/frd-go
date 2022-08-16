@@ -3,7 +3,7 @@ module github.com/0xpanoramix/frd-go
 go 1.18
 
 require (
-	github.com/flashbots/go-boost-utils v0.3.4
+	github.com/flashbots/go-boost-utils v0.3.5
 	github.com/r3labs/sse/v2 v2.8.1
 	github.com/stretchr/testify v1.8.0
 )
