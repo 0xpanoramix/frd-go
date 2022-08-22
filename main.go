@@ -1,7 +1,17 @@
 package main
 
-import "fmt"
+import (
+	"github.com/0xpanoramix/frd-go/data"
+	"log"
+	"time"
+)
 
 func main() {
-	fmt.Println("Hello, World!")
+	clt := data.NewTransparencyClient("https://builder-relay-ropsten.flashbots.net/", time.Second)
+
+	traces, err := clt.GetProposerPayloadsDelivered(nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Println(traces)
 }
