@@ -1,4 +1,4 @@
-package client
+package sse
 
 import (
 	"github.com/0xpanoramix/frd-go/topics"
