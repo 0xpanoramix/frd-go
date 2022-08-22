@@ -9,7 +9,7 @@ on:
       - "**.go"
       - "go.mod"
       - "go.sum"
-      - ".github/workflows/ci.yml"
+      - ".github/workflows/ci.yaml"
 
   pull_request:
     branches:
@@ -19,7 +19,7 @@ on:
       - "**.go"
       - "go.mod"
       - "go.sum"
-      - ".github/workflows/ci.yml"
+      - ".github/workflows/ci.yaml"
 
 defaults:
   run:
