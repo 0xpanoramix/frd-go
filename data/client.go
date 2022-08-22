@@ -39,15 +39,19 @@ func (o *GetProposerPayloadsDeliveredOptions) ToQueryParameters() string {
 	if o.Slot > 0 {
 		args = append(args, fmt.Sprintf("slot=%d", o.Slot))
 	}
+
 	if o.Cursor > 0 {
 		args = append(args, fmt.Sprintf("cursor=%d", o.Cursor))
 	}
+
 	if o.Limit > 0 {
 		args = append(args, fmt.Sprintf("limit=%d", o.Limit))
 	}
+
 	if o.BlockHash != "" {
 		args = append(args, fmt.Sprintf("block_hash=%s", o.BlockHash))
 	}
+
 	if o.BlockNumber > 0 {
 		args = append(args, fmt.Sprintf("block_number=%d", o.BlockNumber))
 	}
@@ -61,6 +65,7 @@ func (o *GetProposerPayloadsDeliveredOptions) ToQueryParameters() string {
 }
 
 // GetProposerPayloadsDelivered provides bids for payloads that were delivered to proposers.
+// nolint:lll
 func (c *TransparencyClient) GetProposerPayloadsDelivered(options *GetProposerPayloadsDeliveredOptions) ([]types.BidTrace, error) {
 	// Creates the URL using the provided the base url and options.
 	path := "/relay/v1/data/bidtraces/proposer_payload_delivered"
@@ -70,7 +75,7 @@ func (c *TransparencyClient) GetProposerPayloadsDelivered(options *GetProposerPa
 		url += options.ToQueryParameters()
 	}
 
-	res, err := http.Get(url)
+	res, err := http.Get(url) //nolint
 	if err != nil {
 		return nil, err
 	}
