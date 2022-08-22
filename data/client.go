@@ -65,7 +65,7 @@ func (o *GetProposerPayloadsDeliveredOptions) ToQueryParameters() string {
 }
 
 // GetProposerPayloadsDelivered provides bids for payloads that were delivered to proposers.
-// nolint:lll
+//nolint:lll
 func (c *TransparencyClient) GetProposerPayloadsDelivered(options *GetProposerPayloadsDeliveredOptions) ([]types.BidTrace, error) {
 	// Creates the URL using the provided the base url and options.
 	path := "/relay/v1/data/bidtraces/proposer_payload_delivered"
