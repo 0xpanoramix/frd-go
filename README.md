@@ -1,12 +1,24 @@
 # frd-go
 
+1. [Introduction](#introduction)
+2. [How do the clients work ?](#how-do-the-clients-work-)
+   1. [HTTP Client](#http-client)
+   2. [SSE Client](#sse-client)
+3. [Getting Started !](#getting-started-)
+   1. [Installation](#installation)
+   2. [Quickstart](#quickstart)
+4. [Contributing](#contributing)
+5. [Author](#author)
+
+## Introduction
+
 frd-go is a package which lets you use several clients to interact with Flashbots Relays, 
 specifically with the [Flashbots Data Transparency API](https://flashbots.notion.site/Relay-API-Spec-5fb0819366954962bc02e81cb33840f5#38a21c8a40e64970904500eb7b373ea5):
 
 - An HTTP client for standard requests to the relays.
 - A client for SSE (server-sent events) events sent by the relays.
 
-## How do they work ?
+## How do the clients work ?
 
 ### HTTP Client
 Using the http package from the goland standard library, it makes requests to the relay you've 
@@ -88,7 +100,7 @@ func main() {
 
 ```
 
-### To contribute
+## Contributing
 
 Make sure you have Go installed
 ```shell
