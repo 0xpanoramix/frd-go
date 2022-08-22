@@ -1,0 +1,29 @@
+run:
+  timeout: 3m
+
+linters:
+  enable:
+    - whitespace
+    - wsl
+    - wastedassign
+    - unconvert
+    - tparallel
+    - thelper
+    - stylecheck
+    - prealloc
+    - predeclared
+    - nolintlint
+    - nlreturn
+    - misspell
+    - makezero
+    - lll
+    - importas
+    - ifshort
+    - gosec
+    - gofmt
+    - goconst
+    - forcetypeassert
+    - dogsled
+    - dupl
+    - errname
+    - errorlint
