@@ -37,8 +37,32 @@ func TestGetProposerPayloadsDelivered(t *testing.T) {
 			},
 		*/
 		{
-			name:          "Valid request",
+			name:          "Valid request on Mainnet",
+			baseURL:       constants.FlashbotsRelayMainnet,
+			options:       nil,
+			expectedError: false,
+		},
+		{
+			name:          "Valid request on Kiln",
+			baseURL:       constants.FlashbotsRelayKiln,
+			options:       nil,
+			expectedError: false,
+		},
+		{
+			name:          "Valid request on Ropsten",
 			baseURL:       constants.FlashbotsRelayRopsten,
+			options:       nil,
+			expectedError: false,
+		},
+		{
+			name:          "Valid request on Sepolia",
+			baseURL:       constants.FlashbotsRelaySepolia,
+			options:       nil,
+			expectedError: false,
+		},
+		{
+			name:          "Valid request on Goerli",
+			baseURL:       constants.FlashbotsRelayGoerli,
 			options:       nil,
 			expectedError: false,
 		},
