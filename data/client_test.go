@@ -98,10 +98,16 @@ func TestGetValidatorRegistration(t *testing.T) {
 		expectedError bool
 	}{
 		{
-			name:          "Validator",
+			name:          "Get valid validator registration",
 			baseURL:       constants.FlashbotsRelayMainnet,
 			publicKey:     publicKey,
 			expectedError: false,
+		},
+		{
+			name:          "Get invalid validator registration",
+			baseURL:       constants.FlashbotsRelayMainnet,
+			publicKey:     types.PublicKey{},
+			expectedError: true,
 		},
 	}
 
