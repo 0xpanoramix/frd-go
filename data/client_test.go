@@ -88,6 +88,7 @@ func TestGetProposerPayloadsDelivered(t *testing.T) {
 
 func TestGetValidatorRegistration(t *testing.T) {
 	publicKey := types.PublicKey{}
+	//nolint:lll
 	err := publicKey.UnmarshalText([]byte("0xb606e206c2bf3b78f53ebff8be8e8d4af2f0da68646b5642c4d511b15ab5ddb122ae57b48eab614f8ca5bafbe75a5999"))
 	require.NoError(t, err)
 
