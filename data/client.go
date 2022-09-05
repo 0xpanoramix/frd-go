@@ -118,3 +118,67 @@ func (c *TransparencyClient) GetValidatorRegistration(publicKey types.
 
 	return &registration, nil
 }
+
+type GetBuilderBlocksReceivedOptions struct {
+	Slot        uint64
+	Limit       uint64
+	BlockHash   string
+	BlockNumber uint64
+}
+
+func (o *GetBuilderBlocksReceivedOptions) ToQueryParameters() string {
+	var args []string
+
+	if o.Slot > 0 {
+		args = append(args, fmt.Sprintf("slot=%d", o.Slot))
+	}
+
+	if o.Limit > 0 {
+		args = append(args, fmt.Sprintf("limit=%d", o.Limit))
+	}
+
+	if o.BlockHash != "" {
+		args = append(args, fmt.Sprintf("block_hash=%s", o.BlockHash))
+	}
+
+	if o.BlockNumber > 0 {
+		args = append(args, fmt.Sprintf("block_number=%d", o.BlockNumber))
+	}
+
+	params := strings.Join(args, "&")
+	if len(params) > 0 {
+		params = "?" + params
+	}
+
+	return params
+}
+
+// GetBuilderBlocksReceived returns the latest validator registration for a given pubkey.
+// Useful to check whether your own registration was successful.
+func (c *TransparencyClient) GetBuilderBlocksReceived(
+	options *GetBuilderBlocksReceivedOptions) ([]types.BidTrace, error) {
+	path := "/relay/v1/data/bidtraces/builder_blocks_received"
+	url := c.baseURL + path
+
+	if options != nil {
+		url += options.ToQueryParameters()
+	}
+
+	res, err := http.Get(url) //nolint
+	if err != nil {
+		return nil, err
+	}
+
+	// Handle error in the response.
+	if res.StatusCode >= 400 {
+		return nil, fmt.Errorf("failed request to %s with status code %d", url, res.StatusCode)
+	}
+
+	// Extract bid traces from response.
+	var traces []types.BidTrace
+	if err = json.NewDecoder(res.Body).Decode(&traces); err != nil {
+		return nil, err
+	}
+
+	return traces, nil
+}
