@@ -2,7 +2,9 @@ package data
 
 import (
 	"github.com/0xpanoramix/frd-go/constants"
+	"github.com/flashbots/go-boost-utils/types"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"testing"
 	"time"
 )
@@ -79,6 +81,41 @@ func TestGetProposerPayloadsDelivered(t *testing.T) {
 			} else {
 				assert.NoError(t, err)
 				assert.NotNil(t, traces)
+			}
+		})
+	}
+}
+
+func TestGetValidatorRegistration(t *testing.T) {
+	publicKey := types.PublicKey{}
+	err := publicKey.UnmarshalText([]byte("0xb606e206c2bf3b78f53ebff8be8e8d4af2f0da68646b5642c4d511b15ab5ddb122ae57b48eab614f8ca5bafbe75a5999"))
+	require.NoError(t, err)
+
+	testCases := []struct {
+		name          string
+		baseURL       string
+		publicKey     types.PublicKey
+		expectedError bool
+	}{
+		{
+			name:          "Validator",
+			baseURL:       constants.FlashbotsRelayMainnet,
+			publicKey:     publicKey,
+			expectedError: false,
+		},
+	}
+
+	for _, tt := range testCases {
+		t.Run(tt.name, func(t *testing.T) {
+			clt := NewTransparencyClient(tt.baseURL, time.Second)
+
+			registration, err := clt.GetValidatorRegistration(tt.publicKey)
+			if tt.expectedError {
+				assert.Error(t, err)
+				assert.Nil(t, registration)
+			} else {
+				assert.NoError(t, err)
+				assert.NotNil(t, registration)
 			}
 		})
 	}
