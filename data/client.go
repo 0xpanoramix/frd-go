@@ -93,3 +93,28 @@ func (c *TransparencyClient) GetProposerPayloadsDelivered(
 
 	return traces, nil
 }
+
+// GetValidatorRegistration returns the latest validator registration for a given public key.
+// Useful to check whether your own registration was successful.
+func (c *TransparencyClient) GetValidatorRegistration(publicKey types.
+	PublicKey) (*types.SignedValidatorRegistration, error) {
+	path := "/relay/v1/data/validator_registration"
+	url := c.baseURL + fmt.Sprintf("%s?pubkey=%s", path, publicKey.String())
+
+	res, err := http.Get(url) //nolint
+	if err != nil {
+		return nil, err
+	}
+
+	// Handle error in the response.
+	if res.StatusCode >= 400 {
+		return nil, fmt.Errorf("failed request to %s with status code %d", url, res.StatusCode)
+	}
+
+	registration := types.SignedValidatorRegistration{}
+	if err = json.NewDecoder(res.Body).Decode(&registration); err != nil {
+		return nil, err
+	}
+
+	return &registration, nil
+}
