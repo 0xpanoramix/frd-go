@@ -10,7 +10,7 @@ import (
 )
 
 func TestNewTransparencyClient(t *testing.T) {
-	client := NewTransparencyClient(constants.FlashbotsRelayRopsten, time.Second)
+	client := NewTransparencyClient(constants.FlashbotsRelayMainnet, time.Second)
 
 	assert.NotNil(t, client)
 }
@@ -41,18 +41,6 @@ func TestGetProposerPayloadsDelivered(t *testing.T) {
 		{
 			name:          "Valid request on Mainnet",
 			baseURL:       constants.FlashbotsRelayMainnet,
-			options:       nil,
-			expectedError: false,
-		},
-		{
-			name:          "Valid request on Kiln",
-			baseURL:       constants.FlashbotsRelayKiln,
-			options:       nil,
-			expectedError: false,
-		},
-		{
-			name:          "Valid request on Ropsten",
-			baseURL:       constants.FlashbotsRelayRopsten,
 			options:       nil,
 			expectedError: false,
 		},
@@ -163,18 +151,6 @@ func TestGetBuilderBlocksReceived(t *testing.T) {
 			options: &GetBuilderBlocksReceivedOptions{
 				Limit: 5,
 			},
-			expectedError: false,
-		},
-		{
-			name:          "Valid request on Kiln",
-			baseURL:       constants.FlashbotsRelayKiln,
-			options:       nil,
-			expectedError: false,
-		},
-		{
-			name:          "Valid request on Ropsten",
-			baseURL:       constants.FlashbotsRelayRopsten,
-			options:       nil,
 			expectedError: false,
 		},
 		{
