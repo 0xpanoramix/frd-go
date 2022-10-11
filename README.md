@@ -25,6 +25,8 @@ Using the http package from the goland standard library, it makes requests to th
 provided.
 List of supported endpoints:
 - [x] `/relay/v1/data/bidtraces/proposer_payload_delivered`
+- [x] `/relay/v1/data/bidtraces/builder_blocks_received`
+- [x] `/relay/v1/data/validator_registration?pubkey=_pubkey_`
 
 ### SSE Client
 Using the [sse package](https://github.com/r3labs/sse) made by r3labs, it connects to the
@@ -57,7 +59,7 @@ import (
 )
 
 func main() {
-	clt := data.NewTransparencyClient(constants.FlashbotsRelayRopsten, time.Second)
+	clt := data.NewTransparencyClient(constants.FlashbotsRelayMainnet, time.Second)
 
 	traces, err := clt.GetProposerPayloadsDelivered(nil)
 	if err != nil {
